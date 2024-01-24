@@ -47,6 +47,15 @@ player_rect = player_image.get_rect()
 player_rect.x = 200
 player_rect.y = 200
 
+meteor_image = pygame.image.load('meteor.png')
+meteor_image = pygame.transform.scale(meteor_image, (50,50))
+meteor_rect = meteor_image.get_rect()
+meteor_rect.x = 500
+meteor_rect.y = 500
+
+# Score title
+score = 0
+
 # Setup background image
 bg_image = pygame.image.load('bg_pygame.jpg')
 bg_image = pygame.transform.scale(bg_image, (bg_image.get_width()/3, bg_image.get_height()/3.3))
@@ -87,6 +96,7 @@ while running:
                 x,y = pygame.mouse.get_pos()
                 player_rect.x = x
                 player_rect.y = y
+
     # Event key (pressed): Sự kiện đè phím
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
@@ -104,6 +114,9 @@ while running:
         x,y = pygame.mouse.get_pos()
         hero_rect.x = x
         hero_rect.y = y
+        # colliderect: hàm hỗ trợ xét va chamh của 2 rect
+        if hero_rect.colliderect(meteor_rect):
+            score += 10
     elif(mouse[2]):
         print("Chuột phải")
     elif(mouse[1]):
@@ -122,11 +135,14 @@ while running:
     
     # Xử lý nhân vật
     pygame.draw.rect(screen, 'Red', hero_rect)
-    pygame.draw.rect(screen, 'Red', player_rect)
+    # pygame.draw.rect(screen, 'Red', player_rect)
     screen.blit(hero_image, (hero_rect.x, hero_rect.y))
     screen.blit(title_time,(SCREEN_WITH/2,0))
     screen.blit(player_image, (player_rect.x, player_rect.y))
-    
+    screen.blit(meteor_image,(meteor_rect.x, meteor_rect.y))
+    # Score
+    score_title = f_game.render(f'score: {score}', True, 'Red')
+    screen.blit(score_title, (900,0))
     # Cập nhật game
     pygame.display.flip()
 
